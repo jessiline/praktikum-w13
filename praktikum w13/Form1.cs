@@ -39,7 +39,7 @@ namespace praktikum_w13
             sqlAdapter = new MySqlDataAdapter(sqlCommand);
             sqlAdapter.Fill(dtPemain);
             
-            
+
             sqlQuery = "SELECT  t.team_name ,t.team_id from team t;";
             sqlCommand = new MySqlCommand(sqlQuery, sqlConnect);
             sqlAdapter = new MySqlDataAdapter(sqlCommand);
@@ -54,7 +54,6 @@ namespace praktikum_w13
             sqlAdapter.Fill(dtcboxNationality);
             comboBoxNationality.DataSource = dtcboxNationality;
             comboBoxNationality.ValueMember = "nation";
-
             DataPemain(0);
         }
         public void DataPemain(int Posisi)
@@ -62,8 +61,8 @@ namespace praktikum_w13
             textBoxID.Text = dtPemain.Rows[Posisi][0].ToString();
             textBoxNama.Text = dtPemain.Rows[Posisi][1].ToString();
             dateTimePickerBirthDate.Text = dtPemain.Rows[Posisi][2].ToString();
-            comboBoxNationality.SelectedValue = dtPemain.Rows[Posisi][3].ToString();
-            comboBoxTeam.SelectedValue = dtPemain.Rows[Posisi][4].ToString();
+            comboBoxNationality.Text = dtPemain.Rows[Posisi][3].ToString();
+            comboBoxTeam.Text = dtPemain.Rows[Posisi][4].ToString();
             numericUpDownNumber.Text = dtPemain.Rows[Posisi][5].ToString();
             PosisiSekarang = Posisi;
         }
@@ -75,11 +74,19 @@ namespace praktikum_w13
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            sqlQuery = $"UPDATE player SET player_name = '" + textBoxNama.Text + "', team_number = '" + numericUpDownNumber.Value.ToString() + "', nationality_id = '" + comboBoxNationality.SelectedValue.ToString() + "', team_id = '" + comboBoxTeam.SelectedValue.ToString() + "' where player_id = '" + textBoxID.Text + "' ";
-            sqlConnect.Open();
-            sqlCommand = new MySqlCommand(sqlQuery, sqlConnect);
-            sqlCommand.ExecuteNonQuery();
-            sqlConnect.Close();
+            if (labelAvailable.Text == "Not Available")
+            {
+                MessageBox.Show("Error message: Tidak bisa save karena team number tidak tersedia");
+            }
+            else if(labelAvailable.Text == "Available")
+            {
+                sqlQuery = $"UPDATE player SET player_name = '" + textBoxNama.Text + "', team_number = '" + numericUpDownNumber.Value.ToString() + "', nationality_id = '" + comboBoxNationality.SelectedValue.ToString() + "', team_id = '" + comboBoxTeam.SelectedValue.ToString() + "' where player_id = '" + textBoxID.Text + "' ";
+                sqlConnect.Open();
+                sqlCommand = new MySqlCommand(sqlQuery, sqlConnect);
+                sqlCommand.ExecuteNonQuery();
+                sqlConnect.Close();
+            }
+
         }
 
         private void buttonPrev_Click(object sender, EventArgs e)
